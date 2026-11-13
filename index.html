@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConectaBR - Amigos & Comunidades</title>
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-card: #131b2e;
+      --bg-input: #1e293b;
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --accent: #a855f7;
+      --success: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #283548;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    /* ================= TELA DE LOGIN ================= */
+    #login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.15), transparent 40%),
+                  radial-gradient(circle at bottom left, rgba(56, 189, 248, 0.15), transparent 40%);
+    }
+
+    .login-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 35px 30px;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .brand-title {
+      font-size: 2rem;
+      font-weight: 800;
+      text-align: center;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .login-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background-color: var(--bg-input);
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .tags-select-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .tag-choice {
+      background-color: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .tag-choice.selected {
+      background-color: rgba(56, 189, 248, 0.2);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      color: #fff;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    /* ================= PLATAFORMA PRINCIPAL ================= */
+    #app-screen {
+      display: none;
+    }
+
+    nav {
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .tab-btn.active {
+      background-color: var(--bg-input);
+      color: var(--primary);
+    }
+
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .btn-logout {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .btn-logout:hover {
+      color: #ef4444;
+      border-color: #ef4444;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 25px 20px;
+    }
+
+    /* Filtros */
+    .filter-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 700px) {
+      .filter-row { grid-template-columns: 1fr; }
+    }
+
+    .btn-secondary {
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background-color: var(--bg-input);
+      color: var(--text-main);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-create {
+      background-color: var(--success);
+      color: #052e16;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Grids de Cards */
+    .grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #090d16;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .card-sub {
+      font-size: 0.85rem;
+      color: var(--primary);
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 15px;
+    }
+
+    .mini-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 15px;
+    }
+
+    .mini-tag {
+      background-color: rgba(56, 189, 248, 0.12);
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+    }
+
+    .btn-action {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: var(--bg-input);
+      color: var(--text-main);
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-action:hover {
+      background-color: var(--primary);
+      color: #090d16;
+    }
+
+    .btn-action.joined {
+      background-color: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+
+    /* Modal Criar Comunidade */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 50;
+    }
+
+    .modal-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 25px;
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .safety-note {
+      margin-top: 35px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      padding: 12px;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= TELA 1: LOGIN E CADASTRO ================= -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="brand-title">ConectaBR</div>
+      <p class="login-subtitle">Entre para encontrar amigos e comunidades em todo o Brasil</p>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label>Seu Apelido (Nickname)</label>
+          <input type="text" id="reg-nome" placeholder="Ex: Gabriel_SP" required maxlength="20">
+        </div>
+
+        <div class="row-2 form-group">
+          <div>
+            <label>Estado (UF)</label>
+            <select id="reg-estado" required>
+              <option value="">Carregando...</option>
+            </select>
+          </div>
+          <div>
+            <label>Cidade</label>
+            <select id="reg-cidade" required disabled>
+              <option value="">Escolha o estado</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Seu Discord ou Instagram (opcional)</label>
+          <input type="text" id="reg-contato" placeholder="Ex: @seuuser ou user#0000">
+        </div>
+
+        <div class="form-group">
+          <label>Sobre você (Bio curta)</label>
+          <input type="text" id="reg-bio" placeholder="O que você curte fazer?" maxlength="110" required>
+        </div>
+
+        <div class="form-group">
+          <label>Selecione seus interesses:</label>
+          <div class="tags-select-grid" id="reg-tags">
+            <span class="tag-choice" data-tag="Games">Games</span>
+            <span class="tag-choice" data-tag="Programação">Programação</span>
+            <span class="tag-choice" data-tag="Música">Música</span>
+            <span class="tag-choice" data-tag="Animes">Animes</span>
+            <span class="tag-choice" data-tag="Esportes">Esportes</span>
+            <span class="tag-choice" data-tag="Estudos">Estudos</span>
+            <span class="tag-choice" data-tag="Arte & Design">Arte & Design</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Entrar na Plataforma</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= TELA 2: PLATAFORMA INTERNA ================= -->
+  <div id="app-screen">
+    <nav>
+      <div class="nav-left">
+        <div class="nav-logo">ConectaBR</div>
+        <div class="nav-tabs">
+          <button class="tab-btn active" onclick="mudarAba('amigos', this)">Explorar Amigos</button>
+          <button class="tab-btn" onclick="mudarAba('comunidades', this)">Comunidades</button>
+        </div>
+      </div>
+
+      <div class="user-badge">
+        <span id="nav-user-info">Olá!</span>
+        <button class="btn-logout" onclick="sair()">Sair</button>
+      </div>
+    </nav>
+
+    <div class="container">
+      <!-- ABA 1: AMIGOS -->
+      <div id="aba-amigos">
+        <div class="filter-box">
+          <div class="filter-row">
+            <select id="filtro-estado">
+              <option value="">Todos os Estados do Brasil</option>
+            </select>
+            <input type="text" id="filtro-cidade" placeholder="Buscar por cidade...">
+            <button class="btn-secondary" onclick="limparFiltrosAmigos()">Limpar</button>
+          </div>
+          <div class="tags-select-grid" id="filtro-tags-amigos">
+            <span class="tag-choice" data-tag="Games">Games</span>
+            <span class="tag-choice" data-tag="Programação">Programação</span>
+            <span class="tag-choice" data-tag="Música">Música</span>
+            <span class="tag-choice" data-tag="Animes">Animes</span>
+            <span class="tag-choice" data-tag="Esportes">Esportes</span>
+            <span class="tag-choice" data-tag="Estudos">Estudos</span>
+            <span class="tag-choice" data-tag="Arte & Design">Arte & Design</span>
+          </div>
+        </div>
+
+        <div class="grid-cards" id="lista-amigos"></div>
+      </div>
+
+      <!-- ABA 2: COMUNIDADES -->
+      <div id="aba-comunidades" style="display: none;">
+        <div class="section-header">
+          <div>
+            <h2>Comunidades da Galera</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Entre em grupos por tema ou cidade, ou crie a sua própria comunidade!</p>
+          </div>
+          <button class="btn-create" onclick="abrirModalComunidade()">+ Criar Nova Comunidade</button>
+        </div>
+
+        <div class="grid-cards" id="lista-comunidades"></div>
+      </div>
+
+      <div class="safety-note">
+        <strong>Segurança em primeiro lugar:</strong> Nunca compartilhe seu endereço residencial, telefone pessoal ou senhas. Respeite todos os membros.
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL CRIAR COMUNIDADE ================= -->
+  <div class="modal-overlay" id="modal-comunidade">
+    <div class="modal-box">
+      <h3 style="margin-bottom: 15px;">Criar Nova Comunidade</h3>
+      <form id="form-comunidade">
+        <div class="form-group">
+          <label>Nome da Comunidade</label>
+          <input type="text" id="com-nome" placeholder="Ex: Devs Iniciantes Brasil" required maxlength="35">
+        </div>
+        <div class="row-2 form-group">
+          <div>"
+            <label>Categoria</label>
+            <select id="com-categoria">
+              <option value="Games">Games</option>
+              <option value="Programação">Programação</option>
+              <option value="Música">Música</option>
+              <option value="Animes">Animes</option>
+              <option value="Estudos">Estudos</option>
+              <option value="Bate-Papo">Bate-Papo Geral</option>
+            </select>
+          </div>
+          <div>
+            <label>Foco Regional</label>
+            <input type="text" id="com-regiao" placeholder="Ex: Brasil Todo ou SP" value="Brasil Todo" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Descrição do Grupo</label>
+          <textarea id="com-desc" rows="3" placeholder="Sobre o que vocês conversam nessa comunidade?" required maxlength="140"></textarea>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <button type="button" class="btn-secondary" style="flex: 1;" onclick="fecharModalComunidade()">Cancelar</button>
+          <button type="submit" class="btn-create" style="flex: 1;">Criar Agora</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ================= DADOS INICIAIS VAZIOS (APENAS REAIS) =================
+    const amigosIniciais = [];
+    const comunidadesIniciais = [];
+
+    // Carrega dados salvos ou usa os vazios
+    let usuarioLogado = JSON.parse(localStorage.getItem("conectabr_user")) || null;
+    let listaAmigos = JSON.parse(localStorage.getItem("conectabr_amigos")) || amigosIniciais;
+    let listaComunidades = JSON.parse(localStorage.getItem("conectabr_comunidades")) || comunidadesIniciais;
+    let tagFiltroAtiva = "";
+
+    // Limpa dados antigos salvos no navegador se houver lixo anterior
+    // (Se quiser resetar completamente o armazenamento local atual)
+    if (!localStorage.getItem("conectabr_limpo")) {
+      localStorage.removeItem("conectabr_amigos");
+      localStorage.removeItem("conectabr_comunidades");
+      localStorage.setItem("conectabr_limpo", "true");
+      listaAmigos = [];
+      listaComunidades = [];
+    }
+
+    // ================= CARREGAR ESTADOS E CIDADES (API IBGE) =================
+    const regEstado = document.getElementById("reg-estado");
+    const regCidade = document.getElementById("reg-cidade");
+    const filtroEstado = document.getElementById("filtro-estado");
+
+    async function carregarEstados() {
+      try {
+        const res = await fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome");
+        const estados = await res.json();
+        regEstado.innerHTML = `<option value="">Selecione...</option>`;
+        estados.forEach(uf => {
+          regEstado.innerHTML += `<option value="${uf.sigla}">${uf.nome} (${uf.sigla})</option>`;
+          filtroEstado.innerHTML += `<option value="${uf.sigla}">${uf.nome} (${uf.sigla})</option>`;
+        });
+      } catch (e) {
+        const ufs = ["SP", "RJ", "MG", "BA", "PR", "RS", "PE", "CE", "SC", "GO"];
+        regEstado.innerHTML = `<option value="">Selecione...</option>`;
+        ufs.forEach(uf => {
+          regEstado.innerHTML += `<option value="${uf}">${uf}</option>`;
+          filtroEstado.innerHTML += `<option value="${uf}">${uf}</option>`;
+        });
+      }
+    }
+
+    regEstado.addEventListener("change", async () => {
+      const uf = regEstado.value;
+      if (!uf) {
+        regCidade.innerHTML = `<option value="">Escolha o estado</option>`;
+        regCidade.disabled = true;
+        return;
+      }
+      regCidade.innerHTML = `<option value="">Carregando cidades...</option>`;
+      regCidade.disabled = true;
+      try {
+        const res = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
+        const cidades = await res.json();
+        regCidade.innerHTML = `<option value="">Selecione a cidade...</option>`;
+        cidades.forEach(c => {
+          regCidade.innerHTML += `<option value="${c.nome}">${c.nome}</option>`;
+        });
+        regCidade.disabled = false;
+      } catch (e) {
+        regCidade.innerHTML = `<option value="Capital">Capital / Outra</option>`;
+        regCidade.disabled = false;
+      }
+    });
+
+    // ================= INTERATIVIDADE DAS TAGS NO LOGIN =================
+    document.querySelectorAll("#reg-tags .tag-choice").forEach(tag => {
+      tag.addEventListener("click", () => tag.classList.toggle("selected"));
+    });
+
+    // ================= SUBMIT LOGIN / CADASTRO =================
+    document.getElementById("login-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById("reg-nome").value.trim();
+      const estado = regEstado.value;
+      const cidade = regCidade.value;
+      const contato = document.getElementById("reg-contato").value.trim();
+      const bio = document.getElementById("reg-bio").value.trim();
+      const tags = Array.from(document.querySelectorAll("#reg-tags .tag-choice.selected"))
+        .map(tag => tag.dataset.tag);
+
+      if (!nome || !estado || !cidade || !bio) {
+        alert("Preencha nome, estado, cidade e bio antes de entrar.");
+        return;
+      }
+
+      const usuario = {
+        nome,
+        estado,
+        cidade,
+        contato,
+        bio,
+        tags
+      };
+
+      usuarioLogado = usuario;
+      localStorage.setItem("conectabr_user", JSON.stringify(usuario));
+
+      document.getElementById("login-screen").style.display = "none";
+      document.getElementById("app-screen").style.display = "block";
+      document.getElementById("nav-user-info").textContent = `Olá, ${nome}!`;
+    });
+
+    function mudarAba(aba, botao) {
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+      if (botao) botao.classList.add("active");
+
+      document.getElementById("aba-amigos").style.display = aba === "amigos" ? "block" : "none";
+      document.getElementById("aba-comunidades").style.display = aba === "comunidades" ? "block" : "none";
+    }
+
+    function sair() {
+      localStorage.removeItem("conectabr_user");
+      usuarioLogado = null;
+      document.getElementById("login-form").reset();
+      document.getElementById("login-screen").style.display = "block";
+      document.getElementById("app-screen").style.display = "none";
+      document.getElementById("nav-user-info").textContent = "Olá!";
+      regCidade.innerHTML = `<option value="">Escolha o estado</option>`;
+      regCidade.disabled = true;
+    }
+
+    function abrirModalComunidade() {
+      document.getElementById("modal-comunidade").style.display = "flex";
+    }
+
+    function fecharModalComunidade() {
+      document.getElementById("modal-comunidade").style.display = "none";
+      document.getElementById("form-comunidade").reset();
+    }
+
+    document.getElementById("form-comunidade").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById("com-nome").value.trim();
+      const categoria = document.getElementById("com-categoria").value;
+      const regiao = document.getElementById("com-regiao").value.trim();
+      const descricao = document.getElementById("com-desc").value.trim();
+
+      if (!nome || !regiao || !descricao) {
+        alert("Preencha todos os campos da comunidade.");
+        return;
+      }
+
+      const comunidade = {
+        id: Date.now(),
+        nome,
+        categoria,
+        regiao,
+        descricao,
+        criador: usuarioLogado ? usuarioLogado.nome : "Anônimo"
+      };
+
+      listaComunidades.push(comunidade);
+      localStorage.setItem("conectabr_comunidades", JSON.stringify(listaComunidades));
+      fecharModalComunidade();
+      alert("Comunidade criada com sucesso!");
+    });
+
+    carregarEstados();
+  </script>
